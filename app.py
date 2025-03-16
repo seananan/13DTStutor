@@ -117,7 +117,6 @@ def your_session():
     print(f"DEBUG: Query: {query}")
     cur.execute(query, (tutee_id,))
     ap_sessions = cur.fetchall()
-    print(f"DEBUG: Applied sessions for user {tutee_id}: {ap_sessions}")
     con.close()
     print(ap_sessions)
     return render_template('your_sessions.html', ap_sessions=ap_sessions)
@@ -135,7 +134,6 @@ def render_tutee_page():
     cur.execute(query)
     sessions = cur.fetchall()
     con.close()
-    print("DEBUG: Sessions ->", sessions)
     return render_template('tutee.html', sessions=sessions)
 
 @app.route('/apply/<int:session_id>', methods=['GET'])
@@ -159,12 +157,9 @@ def render_tutor_page():  # put application's code here
         level = request.form.get('level')
         time = request.form.get('time')
         user_id = session.get('user_id')
-        print(f"DEBUG: user_id = {user_id}")
-        print("DEBUG: session['user_id'] =", session.get('user_id'))
         con = connect_database(DATABASE)
-        cur = con.cursor()
-        print(f"DEBUG: Inserting session with user_id = {user_id}")
         query_insert = "INSERT INTO session (subject, subject_level, session_time, fk_user_id) VALUES (?, ?, ?, ?)"
+        cur = con.cursor()
         cur.execute(query_insert, (subject, level, time, user_id))
         con.commit()
         con.close()
@@ -172,16 +167,6 @@ def render_tutor_page():  # put application's code here
     return render_template('tutor.html')
 
 
-def print_all_users():
-    con = connect_database(DATABASE)
-    cur = con.cursor()
-    cur.execute("SELECT * FROM user;")
-    rows = cur.fetchall()
-    con.close()
-    for row in rows:
-        print(row)
-
 
 if __name__ == '__main__':
-    print_all_users()
     app.run()
