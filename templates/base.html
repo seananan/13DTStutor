@@ -18,7 +18,12 @@
             <a href="/">Home</a>
             <a href="/login">Log In</a>
             <a href="/signup">Sign Up</a>
-            <a href="/booking">Book a Tutor</a>
+            {% if session.is_tutor == True %}
+                <a href="/tutor">Create a Session</a>
+            {% else %}
+                <a href="/tutee">Book a Tutor</a>
+            {% endif %}
+            <a href="/logout">🍆</a>
         </div>
     </div>
 </nav>

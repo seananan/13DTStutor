@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
-{% block pageheading %}welcome{% endblock %}
+{% block pageheading %}
+    {% if user_name %}
+        <br> Hello, {{ user_name }}!
+    {% else %}
+        <br> Book a tutor now!, log in first tho.
+    {% endif %}
+{% endblock %}
 
 {% block main %}
-<strong><em>yo my name is skylar white yo</em></strong>
+<strong><em> </em></strong>
 {% endblock %}
 

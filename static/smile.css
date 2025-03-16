@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: rgb(239, 239, 239);
+    background-color: rgb(255, 246, 246);
 }
 
 .container {
@@ -40,13 +40,13 @@ h2 {
 }
 
 nav {
-    background-color: rgb(166, 227, 239); /* darkest blue */
+    background-color: rgb(32, 212, 255); /* darkest blue */
     text-align: center;
     /*color: rgba(52, 152, 219, 1.0);!*light blue*!*/
     font-size: 1.5rem;
     padding-top: 0.4rem;
     padding-bottom: 0.7rem;
-    color: rgb(255, 255, 255); /*light blue*/
+    color: rgb(147, 255, 233); /*light blue*/
 }
 
 .navbar-brand {
@@ -71,7 +71,7 @@ nav a {
 nav a:hover {
     /*color: rgba(44, 62, 80, 1.0); !* darkest blue *!*/
     /*background-color: rgba(52, 152, 219, 1.0); !*light blue*!*/
-    border-bottom: 3px solid rgb(255, 196, 48);
+    border-bottom: 3px solid rgb(0, 0, 0);
 }
 
 a, a:visited {
@@ -97,7 +97,7 @@ a, a:visited {
     /*display: table-cell;*/
     /*padding: 0.5rem;*/
     /*margin: 1vw;*/
-    border: 1px solid rgb(115, 115, 115);
+    border: 1px solid rgb(0, 0, 0);
     color: rgb(0, 0, 0);
     margin-bottom: 0.5rem;
 }
@@ -127,7 +127,7 @@ a, a:visited {
 }
 
 .product-box a {
-    border: 1px solid tomato;
+    border: 1px solid #000000;
     padding: 0.3rem;
     text-align: right;
 }
@@ -178,7 +178,7 @@ table {
 .cart-table td {
     padding: 0.2rem 1rem;
     text-align: center;
-    border: 1px solid #fd0000;
+    border: 1px solid #000000;
 }
 
 .cart-total {
