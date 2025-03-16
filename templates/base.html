@@ -13,13 +13,14 @@
 <body>
 <nav>
     <div class="container">
-
+        </div>
         <div class="navbar-links">
             <a href="/">Home</a>
             {% if session.logged_in %}
-                <a href="/logout">Log Out</a>
                 <a href="/tutee">Book a Tutor</a>
-                {% if session.is_tutor %}
+                <a href="/logout">Log Out</a>
+                <a href="/your_sessions">Your sessions</a>
+                {% if session.is_tutor == 1%}
                     <a href="/tutor">Create a Session</a>
                 {% endif %}
             {% else %}
@@ -31,7 +32,7 @@
 </nav>
 <div class="container">
     <header>
-        <h1>TUTOR</h1>
+        <h1>Tutor bookings</h1>
         <h2>{% block pageheading %}{% endblock %}</h2>
     </header>
 

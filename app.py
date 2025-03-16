@@ -1,5 +1,3 @@
-from enum import nonmember
-
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from sqlite3 import Error
@@ -102,22 +100,27 @@ def render_signup_page():  # put application's code here
         con.close()
         session["logged_in"] = True
         session['is_tutor'] = is_tutor
+        return redirect("/tutor")
     return render_template('signup.html')
 
-@app.route('/apply',methods=['POST', 'GET'])
-def apply_session():
-    if 'user_id' not in session:
-        return redirect('login.html')
-    session_id = request.form.get('session_id')
+
+
+@app.route('/your_sessions',methods=['POST', 'GET'])
+def your_session():
     tutee_id = session['user_id']
     con = connect_database(DATABASE)
-    cur=con.cursor()
-    query = 'INSERT INTO applications (session_id, tutee_id) VALUES (?, ?)'
-    cur.execute(query, (session_id, tutee_id))
-    con.commit()
+    cur = con.cursor()
+    query = "SELECT DISTINCT session.session_id, session.subject, session.subject_level, session.session_time, user.first_name, user.surname, user.email FROM session JOIN user ON session.fk_user_id = user.user_id JOIN applications ON session.session_id = applications.session_id WHERE applications.user_id = ?"
+    cur.execute(query, (tutee_id,))
+    ap_sessions = cur.fetchall()
+    print(f"DEBUG: Executing query with user_id {tutee_id}")
+    print(f"DEBUG: Query: {query}")
+    cur.execute(query, (tutee_id,))
+    ap_sessions = cur.fetchall()
+    print(f"DEBUG: Applied sessions for user {tutee_id}: {ap_sessions}")
     con.close()
-    return redirect('/tutee')
-
+    print(ap_sessions)
+    return render_template('your_sessions.html', ap_sessions=ap_sessions)
 
 @app.route('/logout')
 def render_logout_page():
@@ -134,18 +137,35 @@ def render_tutee_page():
     con.close()
     print("DEBUG: Sessions ->", sessions)
     return render_template('tutee.html', sessions=sessions)
+
+@app.route('/apply/<int:session_id>', methods=['GET'])
+def apply_for_session(session_id):
+    if 'user_id' in session:
+        user_id = session['user_id']
+        con = connect_database(DATABASE)
+        cur = con.cursor()
+        query_insert = "INSERT INTO applications (user_id, session_id) VALUES (?, ?)"
+        cur.execute(query_insert, (user_id, session_id))
+        con.commit()
+        con.close()
+        return redirect('/your_sessions')
+    else:
+        return redirect('/login')
+
 @app.route('/tutor',methods=['POST', 'GET'])
-def render_booking_page():  # put application's code here
+def render_tutor_page():  # put application's code here
     if request.method == 'POST':
         subject = request.form.get('subject')
         level = request.form.get('level')
         time = request.form.get('time')
-        tutor_id = session.get('user_id')
+        user_id = session.get('user_id')
+        print(f"DEBUG: user_id = {user_id}")
         print("DEBUG: session['user_id'] =", session.get('user_id'))
         con = connect_database(DATABASE)
         cur = con.cursor()
+        print(f"DEBUG: Inserting session with user_id = {user_id}")
         query_insert = "INSERT INTO session (subject, subject_level, session_time, fk_user_id) VALUES (?, ?, ?, ?)"
-        cur.execute(query_insert, (subject, level, time, tutor_id))
+        cur.execute(query_insert, (subject, level, time, user_id))
         con.commit()
         con.close()
         return redirect("/")

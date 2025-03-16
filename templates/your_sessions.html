@@ -1,7 +1,4 @@
 {% extends 'base.html' %}
-
-{% block pageheading %}Available Sessions{% endblock %}
-
 {% block main %}
     <table>
         <tr>
@@ -10,20 +7,14 @@
             <th>Time</th>
             <th>Tutor</th>
             <th>Email</th>
-            <th>Apply</th>
         </tr>
-        {% for session in sessions %}
+        {% for session in ap_sessions %}
         <tr>
             <td>{{ session[1] }}</td>
             <td>{{ session[2] }}</td>
             <td>{{ session[3] }}</td>
             <td>{{ session[4] }} {{ session[5] }}</td>
             <td>{{ session[6] }}</td>
-            <td>
-                <a href="{{ url_for('apply_for_session', session_id=session[0]) }}">
-                    <button type="button">Apply</button>
-                </a>
-            </td>
         </tr>
         {% endfor %}
     </table>

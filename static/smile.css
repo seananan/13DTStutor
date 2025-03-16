@@ -42,10 +42,17 @@ h2 {
 nav {
     background-color: rgb(79, 155, 255); /* darkest blue */
     text-align: center;
-    /*color: rgba(52, 152, 219, 1.0);!*light blue*!*/
     font-size: 1.5rem;
     padding-top: 0.4rem;
     padding-bottom: 0.7rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.navbar-links {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,11 +60,6 @@ nav {
 }
 
 
-}
-
-.navbar-links {
-    display: inline;
-    float: none;
 }
 
 nav a {
