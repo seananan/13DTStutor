@@ -13,17 +13,19 @@
 <body>
 <nav>
     <div class="container">
-        <div class="navbar-brand">ITS TUTOR TIME</div>
+
         <div class="navbar-links">
             <a href="/">Home</a>
-            <a href="/login">Log In</a>
-            <a href="/signup">Sign Up</a>
-            {% if session.is_tutor == True %}
-                <a href="/tutor">Create a Session</a>
-            {% else %}
+            {% if session.logged_in %}
+                <a href="/logout">Log Out</a>
                 <a href="/tutee">Book a Tutor</a>
+                {% if session.is_tutor %}
+                    <a href="/tutor">Create a Session</a>
+                {% endif %}
+            {% else %}
+                <a href="/login">Log In</a>
+                <a href="/signup">Create an account</a>
             {% endif %}
-            <a href="/logout">🍆</a>
         </div>
     </div>
 </nav>

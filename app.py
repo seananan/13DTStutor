@@ -52,7 +52,7 @@ def render_login_page():  # put application's code here\
         cur.execute(query,(email,))
         user_info = cur.fetchone()
         con.close()
-
+        session["logged_in"] = True
         print(f"DEBUG: Entered email: {email}")  # Debugging email input
         print(f"DEBUG: Retrieved user_info: {user_info}")  # Debugging database result
         if user_info:
@@ -100,24 +100,52 @@ def render_signup_page():  # put application's code here
         cur.execute(query_insert, (fname, lname, email, password1, is_tutor))
         con.commit()
         con.close()
+        session["logged_in"] = True
         session['is_tutor'] = is_tutor
     return render_template('signup.html')
+
+@app.route('/apply',methods=['POST', 'GET'])
+def apply_session():
+    if 'user_id' not in session:
+        return redirect('login.html')
+    session_id = request.form.get('session_id')
+    tutee_id = session['user_id']
+    con = connect_database(DATABASE)
+    cur=con.cursor()
+    query = 'INSERT INTO applications (session_id, tutee_id) VALUES (?, ?)'
+    cur.execute(query, (session_id, tutee_id))
+    con.commit()
+    con.close()
+    return redirect('/tutee')
+
 
 @app.route('/logout')
 def render_logout_page():
     session.clear()
     return redirect("/")
 
+@app.route('/tutee',methods=['POST', 'GET'])
+def render_tutee_page():
+    con = connect_database(DATABASE)
+    cur = con.cursor()
+    query = "SELECT session.session_id, session.subject, session.subject_level, session.session_time, user.first_name, user.surname, user.email FROM session JOIN user ON session.fk_user_id = user.user_id"
+    cur.execute(query)
+    sessions = cur.fetchall()
+    con.close()
+    print("DEBUG: Sessions ->", sessions)
+    return render_template('tutee.html', sessions=sessions)
 @app.route('/tutor',methods=['POST', 'GET'])
 def render_booking_page():  # put application's code here
     if request.method == 'POST':
         subject = request.form.get('subject')
         level = request.form.get('level')
         time = request.form.get('time')
+        tutor_id = session.get('user_id')
+        print("DEBUG: session['user_id'] =", session.get('user_id'))
         con = connect_database(DATABASE)
         cur = con.cursor()
-        query_insert = "INSERT INTO session (subject, subject_level, session_time) VALUES (?, ?, ?)"
-        cur.execute(query_insert, (subject, level, time))
+        query_insert = "INSERT INTO session (subject, subject_level, session_time, fk_user_id) VALUES (?, ?, ?, ?)"
+        cur.execute(query_insert, (subject, level, time, tutor_id))
         con.commit()
         con.close()
         return redirect("/")

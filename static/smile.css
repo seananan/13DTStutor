@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: rgb(255, 246, 246);
+    background-color: rgb(255, 255, 255);
 }
 
 .container {
@@ -40,23 +40,24 @@ h2 {
 }
 
 nav {
-    background-color: rgb(32, 212, 255); /* darkest blue */
+    background-color: rgb(79, 155, 255); /* darkest blue */
     text-align: center;
     /*color: rgba(52, 152, 219, 1.0);!*light blue*!*/
     font-size: 1.5rem;
     padding-top: 0.4rem;
     padding-bottom: 0.7rem;
-    color: rgb(147, 255, 233); /*light blue*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
 
-.navbar-brand {
-    display: inline;
-    float: left;
+
 }
 
 .navbar-links {
     display: inline;
-    float: right;
+    float: none;
 }
 
 nav a {
@@ -97,8 +98,8 @@ a, a:visited {
     /*display: table-cell;*/
     /*padding: 0.5rem;*/
     /*margin: 1vw;*/
-    border: 1px solid rgb(0, 0, 0);
-    color: rgb(0, 0, 0);
+    border: 1px solid rgb(255, 0, 0);
+    color: rgb(255, 0, 0);
     margin-bottom: 0.5rem;
 }
 
@@ -127,7 +128,7 @@ a, a:visited {
 }
 
 .product-box a {
-    border: 1px solid #000000;
+    border: 1px solid #ffffff;
     padding: 0.3rem;
     text-align: right;
 }
@@ -168,7 +169,38 @@ a, a:visited {
 }
 
 table {
-    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 0;
+    margin-top: 1rem;
+    background-color: #ffffff;
+    border-radius:7px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #000000;
+}
+
+th {
+    background-color: rgb(79, 155, 255);
+    color: #050505;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+td form {
+    margin: 0;
+}
+
+input[type="submit"] {
+    background-color: rgb(79, 155, 255);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .cart-table > thead {
@@ -184,6 +216,7 @@ table {
 .cart-total {
     font-weight: bold;
 }
+
 
 
 @media only screen and (max-width: 600px) {
