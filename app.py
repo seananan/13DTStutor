@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from sqlite3 import Error
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
-
+bcrypt = Bcrypt(app)
 app.secret_key = "secret_key"
 DATABASE = 'DB_FILE'
 
@@ -51,20 +52,19 @@ def render_login_page():  # put application's code here\
         user_info = cur.fetchone()
         con.close()
         session["logged_in"] = True
-        print(f"DEBUG: Entered email: {email}")  # Debugging email input
-        print(f"DEBUG: Retrieved user_info: {user_info}")  # Debugging database result
+
         if user_info:
             stored_password = user_info[0]
             print(stored_password)
             print(user_info[0])
             print(password)
-            if stored_password == password:
+            if not bcrypt.check_password_hash(stored_password, password):
+                return redirect("/login?error=email+or+password+invalid")
+            else:
                 session['user_id'] = user_info[1]
                 session['email'] = user_info[2]
                 session['is_tutor'] = bool(user_info[3])
                 return redirect("/")
-            else:
-                return redirect("/login?error=Incorrect+password")
         else:
             return redirect("/login?error=Account+not+found")
     return render_template('login.html')
@@ -86,6 +86,7 @@ def render_signup_page():  # put application's code here
         else:
             session['logged_in = True']=True
             redirect('/')
+        hashed_password = bcrypt.generate_password_hash(password1)
         con = connect_database(DATABASE)
         querysean = "SELECT email FROM user"
         cur = con.cursor()
@@ -95,7 +96,7 @@ def render_signup_page():  # put application's code here
             return redirect("\signup?error=email+already+in+use")
         is_tutor = 1 if user_role == "Tutor" else 0
         query_insert = "INSERT INTO user (first_name, surname, email, password, is_tutor) VALUES (?, ?, ?, ?, ?)"
-        cur.execute(query_insert, (fname, lname, email, password1, is_tutor))
+        cur.execute(query_insert, (fname, lname, email, hashed_password, is_tutor))
         con.commit()
         con.close()
         session["logged_in"] = True
@@ -165,7 +166,6 @@ def render_tutor_page():  # put application's code here
         con.close()
         return redirect("/")
     return render_template('tutor.html')
-
 
 
 if __name__ == '__main__':
