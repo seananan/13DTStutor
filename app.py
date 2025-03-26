@@ -9,6 +9,14 @@ app.secret_key = "secret_key"
 DATABASE = 'DB_FILE'
 
 
+def is_logged_in():
+    if (session.get['user_id'] is None):
+        return False
+        print("Not logged in")
+    else:
+        print("Logged in")
+        return True
+
 def connect_database(db_file):
     """
     Creates a connection to the database.
@@ -101,9 +109,8 @@ def render_signup_page():  # put application's code here
         con.close()
         session["logged_in"] = True
         session['is_tutor'] = is_tutor
-        return redirect("/tutor")
+        return redirect("/")
     return render_template('signup.html')
-
 
 
 @app.route('/your_sessions',methods=['POST', 'GET'])
@@ -122,10 +129,12 @@ def your_session():
     print(ap_sessions)
     return render_template('your_sessions.html', ap_sessions=ap_sessions)
 
+
 @app.route('/logout')
 def render_logout_page():
     session.clear()
     return redirect("/")
+
 
 @app.route('/tutee',methods=['POST', 'GET'])
 def render_tutee_page():
@@ -134,6 +143,7 @@ def render_tutee_page():
     query = "SELECT session.session_id, session.subject, session.subject_level, session.session_time, user.first_name, user.surname, user.email FROM session JOIN user ON session.fk_user_id = user.user_id"
     cur.execute(query)
     sessions = cur.fetchall()
+    session['applied'] = True
     con.close()
     return render_template('tutee.html', sessions=sessions)
 

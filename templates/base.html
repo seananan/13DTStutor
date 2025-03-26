@@ -19,7 +19,9 @@
             {% if session.logged_in %}
                 <a href="/tutee">Book a Tutor</a>
                 <a href="/logout">Log Out</a>
-                <a href="/your_sessions">Your sessions</a>
+                {% if session.applied %}
+                    <a href="/your_sessions">Your sessions</a>
+                {% endif %}
                 {% if session.is_tutor == 1%}
                     <a href="/tutor">Create a Session</a>
                 {% endif %}
